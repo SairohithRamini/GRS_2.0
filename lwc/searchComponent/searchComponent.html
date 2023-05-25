@@ -1,0 +1,16 @@
+<!-- <template>
+    <lightning-input label="Account Name" onchange={handleSearchChange}></lightning-input>
+    <template if:true={accounts}>
+        <lightning-datatable data={accounts} columns={columns} key-field="Id"></lightning-datatable>
+    </template>
+</template> -->
+<template>
+    <lightning-card>
+        <lightning-input type="search" label="Account Name" value={accountName} 
+        onchange={handleKeyChange} oninput={handleInputChange} class="slds-m-bottom_small" data-field="Name">
+        </lightning-input>
+        <!--<lightning-input label="Tax ID" data-field="TaxId" onchange={handleInputChange}></lightning-input> -->
+        <lightning-button label="Search" onclick={handleSearch}></lightning-button>
+        <lightning-datatable data={accounts} columns={columns} key-field="Id" onrowaction={handleRowAction}></lightning-datatable>
+        </lightning-card>
+</template>

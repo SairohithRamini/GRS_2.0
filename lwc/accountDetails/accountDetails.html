@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Account Details" icon-name="standard:account">
+        <template if:true={account.data}>
+            <div class="slds-m-around_medium">
+                <p><lightning-formatted-text title="Account Name" value={account.data.fields.Name.value}></lightning-formatted-text></p>
+                <p><lightning-formatted-text title="Phone" value={account.data.fields.Phone.value}></lightning-formatted-text></p>
+                <!-- Add more fields as necessary -->
+            </div>
+        </template>
+        <template if:true={account.error}>
+            <div class="slds-m-around_medium">
+                <p>Error retrieving account details</p>
+            </div>
+        </template>
+    </lightning-card>
+</template>
