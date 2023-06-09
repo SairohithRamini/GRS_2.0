@@ -1,0 +1,55 @@
+<template>
+    <lightning-card>
+        <lightning-card title="Available Rules"></lightning-card>
+        <lightning-radio-group options={labelOptions} value={selectedLabel} onchange={handleLabelChange}></lightning-radio-group>
+
+        <div class="datatable">
+            <template if:true={showStandardSchema}>
+                <div class="title" style="text-align: left; font-weight: bold; margin-top: 1rem;">Standard Schema</div>
+                <br></br>
+                <lightning-datatable key-field="Id" data={standardSchemas} columns={standardColumns}></lightning-datatable>
+            </template>
+
+            <template if:true={showSpecialSchema}>
+                <div class="title" style="text-align: left; font-weight: bold; margin-top: 1rem;">Special Schema</div>
+                <br></br>
+                <lightning-datatable key-field="Id" data={specialSchemas} columns={specialColumns}></lightning-datatable>
+            </template>
+        </div>
+
+        <template if:true={showRuleDetailPage}>
+            <div class="rule-detail">
+                <div class="title">{selectedRule.Schema_Name__c} Details</div>
+                <div class="detail-item">
+                    <span class="label">Schema Name:</span>
+                    <span class="value">{selectedRule.Schema_Name__c}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">End Date:</span>
+                    <span class="value">{selectedRule.End_Date__c}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Rule Type:</span>
+                    <span class="value">{selectedRule.Rule_Type__c}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Rule Name:</span>
+                    <span class="value">{selectedRule.Rule_Name__c}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Start Date:</span>
+                    <span class="value">{selectedRule.Start_Date__c}</span>
+                </div>
+            </div>
+        </template>
+
+        <!-- <div class="pagination-container">
+            <span class="previous-button-container">
+                <button class="previous-button">Previous</button>
+            </span>
+            <span class="next-preview-button-container">
+                <button class="next-preview-button">Next & Preview</button>
+            </span>
+        </div> -->
+    </lightning-card>
+</template>

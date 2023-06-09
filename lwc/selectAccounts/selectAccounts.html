@@ -1,0 +1,7 @@
+<template>
+    <!-- Using Search component -->
+     <c-search-component display-lable={lb_accountSelection} object-name="Account" onrecordselected={handleAccSelected} show-search-button=true></c-search-component>
+    <div if:true={accSelected}>
+        <c-search-component display-lable={lb_chooseContact} object-name="Contact" onrecordselected={handleContSelected} where-clause={contWhereClause}></c-search-component>
+    </div>  
+    </template>  

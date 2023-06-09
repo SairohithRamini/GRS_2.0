@@ -1,16 +1,23 @@
-<!-- <template>
-    <lightning-input label="Account Name" onchange={handleSearchChange}></lightning-input>
-    <template if:true={accounts}>
-        <lightning-datatable data={accounts} columns={columns} key-field="Id"></lightning-datatable>
-    </template>
-</template> -->
 <template>
     <lightning-card>
-        <lightning-input type="search" label="Account Name" value={accountName} 
-        onchange={handleKeyChange} oninput={handleInputChange} class="slds-m-bottom_small" data-field="Name">
+        <lightning-input type="search" label={displayLable} value={accountName} 
+         class="slds-m-bottom_small" data-field="Name">
         </lightning-input>
         <!--<lightning-input label="Tax ID" data-field="TaxId" onchange={handleInputChange}></lightning-input> -->
-        <lightning-button label="Search" onclick={handleSearch}></lightning-button>
-        <lightning-datatable data={accounts} columns={columns} key-field="Id" onrowaction={handleRowAction}></lightning-datatable>
-        </lightning-card>
+        <div if:true={showSearchButton}>
+            <lightning-button label="Search" onclick={handleSearch}></lightning-button>
+        </div>        
+        <!-- <lightning-datatable data={searchResults} columns={columns} key-field="Id" onrowaction={handleRowAction}></lightning-datatable> -->
+
+        <template if:true={showRecords}>
+            <ul>
+                <template for:each={searchResults} for:item="record" for:index="index">                               
+                    <li key={record.Id} data-id={record.Id} 
+                    onclick={handleRecSelection} class="slds-m-bottom_small slds-cursor_pointer">
+                        {record.Name}
+                    </li>
+                </template>
+            </ul>
+        </template>
+        </lightning-card>        
 </template>

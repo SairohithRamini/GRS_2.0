@@ -1,0 +1,9 @@
+<!-- contractInputForm.html -->
+<template>
+    <lightning-input type="date" name="contractStartDate" label="Contract Start Date" onchange={handleInputChange}></lightning-input>
+    <lightning-input type="date" name="contractEndDate" label="Contract End Date" onchange={handleInputChange}></lightning-input>
+    <lightning-input type="checkbox" name="emailCheckbox" label="Email Checkbox" onchange={handleInputChange}></lightning-input>
+    <lightning-input type="checkbox" name="signatoryCheckbox" label="Signatory Checkbox" onchange={handleInputChange}></lightning-input>
+    <c-lookup object-api-name="Account" filter="RecordType.Name = 'Wholesaler'" name="wholesalerAccount" onchange={handleInputChange}></c-lookup>
+    <lightning-button variant="brand" label="Next" title="Next" onclick={handleNext} class="slds-m-left_x-small"></lightning-button>
+</template>

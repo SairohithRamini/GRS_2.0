@@ -1,19 +1,21 @@
 <template>
     <lightning-card>
-        <lightning-input type="search" label="Search" value={accountName} 
+        <lightning-button label="Create New Contract" 
+            onclick={handleCreateContract} variant="success" 
+            disabled={isButtonDisabled}>
+        </lightning-button>
+        <lightning-input type="search" label="Account Name" value={accountName} 
             onchange={handleKeyChange} class="slds-m-bottom_small">
         </lightning-input>
         <template if:true={showAccountList}>
             <ul>
                 <template for:each={accountList} for:item="account" for:index="index">
-                    <li key={account.Id} data-name={account.Name} 
+                    <li key={account.Id} data-id={account.Id} 
                         onclick={handleItemClick} class="slds-m-bottom_small slds-cursor_pointer">
                         {account.Name}
                     </li>
                 </template>
             </ul>
         </template>
-        <lightning-button label="Search" onclick={handleSearch}></lightning-button>
-        <lightning-datatable data={accounts} columns={columns} key-field="Id" onrowaction={handleRowAction}></lightning-datatable>
     </lightning-card>
 </template>

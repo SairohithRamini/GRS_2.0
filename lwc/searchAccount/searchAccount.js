@@ -1,70 +1,83 @@
 import { LightningElement, wire, track } from 'lwc';
 import getAccounts from '@salesforce/apex/AccountSearch.getAccounts';
-import searchAccounts from '@salesforce/apex/SearchController.searchAccounts';
 
 export default class SearchAccount extends LightningElement {
     @track accountName = '';
     @track accountList = [];
-    @track searchParams = {
-        Name: '',
-        TaxId: ''
-    };
-    @track accounts = [];
-    columns = [
-        { label: 'Name', fieldName: 'Name' },
-        { label: 'Tax ID', fieldName: 'Tax_Identification_Number__c' },
-        { type: 'button', typeAttributes: { label: 'Select', name: 'select', variant: 'base' }}
-    ];
-    
+    @track selectedAccount = null;
+    @track isButtonDisabled = true;
+    @track selectedContact = null;
+
     @wire(getAccounts, { actName: '$accountName' })
     retrieveAccounts({error, data}) {
         if(data) {
             this.accountList = data;
+            console.log('Retrieved Accounts: ', data);
         } else if(error) {
-            console.log('Error: ' + JSON.stringify(error));
+            console.error('Error: ' + JSON.stringify(error));
         }
     }
 
     handleKeyChange(event) {
         this.accountName = event.target.value;
-        this.searchParams.Name = this.accountName;
-        this.handleSearch();
+        console.log('Account Name Entered: ', this.accountName);
+        
     }
 
     handleItemClick(event) {
-        this.accountName = event.target.dataset.name;
+        const accountId = event.currentTarget.dataset.id;
+        this.selectedAccount = this.accountList.find(account => account.Id === accountId);
+        this.accountName = this.selectedAccount.Name;
+    
+        this.isButtonDisabled = !this.selectedAccount;
+        console.log('Selected Account: ', this.selectedAccount);
+        
+        // Set the selectedContact only if the Contacts field is defined and has at least one record
+        if (this.selectedAccount.Contacts && this.selectedAccount.Contacts.records.length > 0) {
+            this.selectedContact = this.selectedAccount.Contacts.records[0];
+            console.log('Selected Contact: ', this.selectedContact);
+        } else {
+            // If there's no contact, set selectedContact as undefined
+            this.selectedContact = undefined;
+            console.log('No contact found for this account');
+        }
+    
+        // Dispatch the event with both account and contact details
+        this.dispatchEvent(new CustomEvent('selected', {
+            detail: { account: this.selectedAccount, contact: this.selectedContact }
+        }));
+        console.log('Dispatched selected event with selected account and contact');
     }
+    
 
     get showAccountList() {
         return this.accountName && this.accountList && this.accountList.length > 0;
     }
 
-    handleInputChange(event) {
-        const field = event.target.dataset.field;
-        this.searchParams[field] = event.target.value;
-        console.log(`Input changed: ${field} = ${this.searchParams[field]}`);
-    }
-
-    handleSearch() {
-        console.log('Search button clicked');
-        console.log(`Search parameters: ${JSON.stringify(this.searchParams)}`);
-        searchAccounts({ accountName: this.searchParams.Name, taxId: this.searchParams.TaxId })
-            .then(result => {
-                console.log(`Search results: ${JSON.stringify(result)}`);
-                this.accounts = result;
-            })
-            .catch(error => {
-                console.log('Error: ' + JSON.stringify(error));
-            });
-    }
-
-    handleRowAction(event) {
-        const selectedAccountId = event.detail.row.Id;
-        const selectedAcc = this.accounts.find(acc => acc.Id === selectedAccountId);
-        console.log('this.selectedAccountId >> '+selectedAccountId);
-        console.log(JSON.stringify(selectedAcc));
-        window.dispatchEvent(new CustomEvent('accountselected', { detail: selectedAcc }));
+    handleCreateContract() {
+        console.log('Creating contract for selected account');
+        const selectedEvent = new CustomEvent('selected', {
+            detail: this.selectedAccount
+        });
+      
+        // Dispatch the custom event
+        this.dispatchEvent(selectedEvent);
+        console.log('Dispatched selected event with selected account');
     }
 }
+   
 
+// handleItemClick(event) {
+//     const accountId = event.currentTarget.dataset.id;
+//     this.selectedAccount = this.accountList.find(account => account.Id === accountId);
+//     this.accountName = this.selectedAccount.Name;
 
+//     // Assuming each Account has at least one Contact, select the first one
+//     if (this.selectedAccount.Contacts && this.selectedAccount.Contacts.records.length > 0) {
+//         this.selectedContact = this.selectedAccount.Contacts.records[0];
+//     }
+
+//     this.dispatchEvent(new CustomEvent('selected', {
+//         detail: { account: this.selectedAccount, contact: this.selectedContact }
+//     }));
+// }

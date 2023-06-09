@@ -1,22 +1,11 @@
 <template>
-    <c-account-details onaccountforcontract={handleAccountForContract}></c-account-details>
-    
-    <template if:true={selectedAccount}>
-        <!-- Account Details -->
-        <lightning-card title="Account Details" icon-name="standard:account">
-            <div class="slds-m-around_medium">
-                <p><b>Account Name:</b> {selectedAccount.Name}</p>
-                <!-- include additional fields as required -->
-            </div>
-        </lightning-card>
+     <c-select-accounts 
+        onaccountselected={handleAccountSelected}
+        oncontactselected={handleContactSelected}>
+    </c-select-accounts>
 
-        <!-- Contract Basic Details -->
-        <lightning-input label="Contract Details" onchange={handleContractDetailsChange}></lightning-input>
-        <!-- Business Unit Details -->
-        <lightning-input label="Business Unit Details" onchange={handleBusinessUnitDetailsChange}></lightning-input>
-        <!-- Wholesaler Details -->
-        <lightning-input label="Wholesaler Details" onchange={handleWholesalerDetailsChange}></lightning-input>
-        <!-- Submit Button -->
-        <lightning-button label="Submit" onclick={handleSubmit} class="slds-m-top_medium"></lightning-button>
-    </template>
+    <div if:true={selectedContact}>
+
+       <c-account-details account={selectedAccount} contact={selectedContact}></c-account-details>
+    </div>
 </template>
